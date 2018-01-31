@@ -4,6 +4,8 @@ import Board from '../components/Board'
 import Players from '../components/Players'
 import DialogInfo from '../components/DialogInfo'
 
+import RaisedButton from 'material-ui/RaisedButton';
+
 import {
   createBoard,
   getLastPions,
@@ -12,12 +14,12 @@ import {
   getMessageDialog,
 } from '../lib'
 
-import '../App.css'
-
-const DEFAULT_VALUE = { row: 7, col: 6 }
+import '../styles/App.css'
 
 class App extends Component {
-  init(size = DEFAULT_VALUE) {
+  init() {
+    const {size} = this.state
+
     const matrice = createBoard(size)
     this.setState({
       matrice,
@@ -28,7 +30,7 @@ class App extends Component {
     })
   }
 
-  over(type, value) {
+  openDialog(type, value) {
     const message = getMessageDialog(type, value)
     this.setState({ dialog: { open: true, message }, finish: true })
   }
@@ -49,9 +51,14 @@ class App extends Component {
         this.setState({ matrice: newMatrice })
 
         if (checkWinner(matrice, row)) {
-          this.over('finish', players[currentPlayer].name)
+          const newArrayPlayer = [...players]
+          newArrayPlayer[currentPlayer].win++
+
+          this.setState({players:newArrayPlayer})
+
+          this.openDialog('finish', players[currentPlayer].name)
         } else if (checkDraw(matrice)) {
-          this.over('draw')
+          this.openDialog('draw')
         } else {
           this.switchPlayer()
         }
@@ -82,14 +89,22 @@ class App extends Component {
         open: false,
         message: '',
       },
+      size: {
+        row:5,
+        col:6,
+      }
     }
   }
   componentDidMount() {
     this.init()
   }
 
+  inputChange(value,  type) {
+    this.setState({size:{...this.state.size, [type]:value }}, this.init)
+  }
+
   render() {
-    const { appLoaded, matrice, players, current, dialog } = this.state
+    const { appLoaded, matrice, players, current, dialog, size } = this.state
 
     return (
       <div className="connect4">
@@ -100,14 +115,15 @@ class App extends Component {
             <Board
               matrice={matrice}
               handleClick={col => this.updateCase(col)}
+              size={size}
+              handleInputChange={(type) => (e, value) => this.inputChange(value, type)}
             />
+
             <Players
               contents={players}
               handleClick={id => this.updateName(id)}
             />
-            <div className="restart" onClick={() => this.init()}>
-              Restart
-            </div>
+            <div className="restart"><RaisedButton label="Restart" onClick={() => this.init()} /></div>
           </div>
         )}
         <DialogInfo

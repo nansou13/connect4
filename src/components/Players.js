@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 
 const Players = ({ contents, handleClick }) => {
   const playersDisplay = contents.map((player, i) => (
-    <div className="player">
+    <div className="player" key={i}>
       <span className={i ? 'case yellow' : 'case red'} />
       <span className="name" onClick={() => handleClick(i)}>
-        {player.name}
+        <div>{player.name}</div><div>{player.win}</div>
       </span>
 
       {!i && <span className="versus">VS</span>}

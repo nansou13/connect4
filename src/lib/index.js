@@ -27,6 +27,7 @@ export function checkWinner(matrice, rSelected) {
   const nbPerLine = 4
   const rowMax = matrice.length - nbPerLine
   const colMax = matrice[0].length - nbPerLine
+
   let row,
     col = 0
 
@@ -39,7 +40,7 @@ export function checkWinner(matrice, rSelected) {
   }
 
   // Check Down only if 4 from bottom
-  if (rSelected <= matrice.length - 4) {
+  //if (rSelected <= matrice.length - 4) {
     for (row = 0; row <= rowMax; row++) {
       for (col = 0; col < matrice[0].length; col++) {
         if (
@@ -71,7 +72,7 @@ export function checkWinner(matrice, rSelected) {
 
     // down-left
     for (row = 0; row <= rowMax; row++) {
-      for (col = nbPerLine - 1; col < matrice.length; col++) {
+      for (col = nbPerLine - 1; col < matrice[0].length; col++) {
         if (
           checkLine([
             matrice[row][col],
@@ -83,7 +84,7 @@ export function checkWinner(matrice, rSelected) {
           return matrice[row][col]
       }
     }
-  }
+//  }
 
   return false
 }

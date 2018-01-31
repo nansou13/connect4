@@ -15,7 +15,7 @@ const DialogInfo = ({ values: { open, message }, handleClose, restart }) => {
       open={open}
       onRequestClose={handleClose}
     >
-      {message}
+      <div className="dialogMessage">{message}</div>
     </Dialog>
   )
 }
