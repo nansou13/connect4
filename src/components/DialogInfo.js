@@ -1,0 +1,23 @@
+import React from 'react'
+
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+
+const DialogInfo = ({ values: { open, message }, handleClose, restart }) => {
+  const actions = [
+    <FlatButton label="Restart" primary onClick={restart} />,
+    <FlatButton label="Close" primary onClick={handleClose} />,
+  ]
+  return (
+    <Dialog
+      actions={actions}
+      modal={false}
+      open={open}
+      onRequestClose={handleClose}
+    >
+      {message}
+    </Dialog>
+  )
+}
+
+export default DialogInfo
