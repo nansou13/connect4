@@ -2,15 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Cell from '../components/Cells'
+import { playerPlay, updateBoardMulti } from '../socket'
 
 import { getLastPions, checkWinner, checkDraw } from '../lib'
 
 import { SWITCH_PLAYER, UPDATE_CASE, FINISH, DRAW } from '../action-creator'
 
-const mapStateToProps = ({ board, common: { finish, appName }, players }) => ({
+const mapStateToProps = ({ board, common: { finish, appName, multiplayerId, multi }, players }) => ({
   board,
   finish,
   appName,
+  multiplayerId,
+  multi,
   players,
 })
 
@@ -22,10 +25,15 @@ const mapDispatchToProps = dispatch => ({
 })
 
 class Board extends Component {
+
+  componentWillMount(){
+    updateBoardMulti(this.updateCase)
+  }
+
   constructor(...args) {
     super(...args)
 
-    this.updateCase = col => {
+    this.updateCase = (col, IA) => {
       const {
         board,
         finish,
@@ -34,6 +42,7 @@ class Board extends Component {
         drawGame,
         switchPlayer,
         players,
+        multi,
       } = this.props
 
       const { current } = players
@@ -45,6 +54,9 @@ class Board extends Component {
         if (row !== null) {
           newBoard[row][col] = current ? 2 : 1
           updateBoard(newBoard)
+          if(!IA && multi){
+            playerPlay({row,col})
+          }
 
           if (checkWinner(board, row))
             finishGame(players)
@@ -55,22 +67,39 @@ class Board extends Component {
 
         } else
             alert('full !')
+      }
+    }
 
+    this.manageClick = (col) => {
+      const { players: { current }, multiplayerId, multi } = this.props
+      if(multi){
+        if(current===multiplayerId)
+          this.updateCase(col, false)
+      }else{
+        this.updateCase(col, false)
       }
     }
   }
 
   render() {
-    const { appName, board, players: { list: players, current } } = this.props
+    const { appName, board, players: { list: players, current }, multi, multiplayerId } = this.props
+    let h3Text = <h3>{`waiting ${players[current].name}...`}</h3>
+    if(multi){
+      if(current===multiplayerId){
+        h3Text = <h3>{`waiting you...`}</h3>
+      }else{
+        h3Text = <h3>{`waiting ${players[current].name}...`}</h3>
+      }
+    }
     return (
       <div id="board">
         <h1>{appName}</h1>
-        <h3>{`waiting ${players[current].name}...`}</h3>
+        {h3Text}
         {board.map((row, x) => {
           const cells = row.map((v, col) => (
             <Cell
               key={`${col}-${x}`}
-              onClick={() => this.updateCase(col)}
+              onClick={() => this.manageClick(col)}
               value={v}
             />
           ))

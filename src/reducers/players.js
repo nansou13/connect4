@@ -3,7 +3,11 @@ import {
   SWITCH_PLAYER,
   PLAYER_RENAME,
   FINISH,
+  MULTIGAME_STARTED,
+  MULTIGAME_UPDATE_BOARD,
 } from '../action-creator'
+
+import { getRandomInt } from '../lib'
 
 const defaultState = {
   list: [
@@ -18,8 +22,9 @@ export default (state = defaultState, action) => {
     case APP_LOAD:
       return {
         ...state,
-        current: 0,
+        current: getRandomInt(2),
       }
+    case MULTIGAME_UPDATE_BOARD:
     case SWITCH_PLAYER:
       return {
         ...state,
@@ -47,6 +52,12 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         list: newArrayFinish,
+      }
+
+    case MULTIGAME_STARTED:
+      return {
+        ...state,
+        list: action.payload.players.listPlayer,
       }
     default:
       return state
