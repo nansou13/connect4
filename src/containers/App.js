@@ -72,7 +72,9 @@ class App extends Component {
     const { players } = this.state
     const newArray = [...players]
 
-    newArray[id].name = prompt("player1's name ?", players[id].name)
+    const newName = prompt("player's name ?", players[id].name || null)
+
+    newArray[id].name = newName || players[id].name
     this.setState({ players: newArray })
   }
 

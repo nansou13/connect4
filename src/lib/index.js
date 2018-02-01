@@ -113,5 +113,6 @@ export function getMessageDialog(type, value) {
 }
 
 export function updateName(name) {
-  return prompt("player's name ?", name || null)
+  const newName = prompt("player's name ?", name || null)
+  return newName || name
 }
