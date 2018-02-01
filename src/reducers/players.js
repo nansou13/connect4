@@ -7,8 +7,6 @@ import {
   MULTIGAME_UPDATE_BOARD,
 } from '../action-creator'
 
-import { getRandomInt } from '../lib'
-
 const defaultState = {
   list: [
     { id: 0, name: 'Player1', win: 0 },
@@ -22,7 +20,7 @@ export default (state = defaultState, action) => {
     case APP_LOAD:
       return {
         ...state,
-        current: getRandomInt(2),
+        current: 0,
       }
     case MULTIGAME_UPDATE_BOARD:
     case SWITCH_PLAYER:
