@@ -1,144 +1,60 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-import Board from '../components/Board'
-import Players from '../components/Players'
+import Board from '../containers/Board'
+import Players from '../containers/Players'
 import DialogInfo from '../components/DialogInfo'
 
-import { getRandomInt } from '../lib'
+import { store } from '../store'
 
-import RaisedButton from 'material-ui/RaisedButton';
+import { APP_LOAD, PLAYER_RENAME, DIALOG_CLOSE } from '../action-creator'
 
-import {
-  createBoard,
-  getLastPions,
-  checkWinner,
-  checkDraw,
-  getMessageDialog,
-} from '../lib'
+import RaisedButton from 'material-ui/RaisedButton'
+
+import { createBoard } from '../lib'
 
 import '../styles/App.css'
 
+const DEFAULT_VALUE = { row: 6, col: 7 }
+
+const mapStateToProps = ({ common: { appLoaded }, dialog }) => ({
+  appLoaded,
+  dialog,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onLoad: matrice => dispatch({ type: APP_LOAD, payload: matrice }),
+  renamePlayer: (id, name) => dispatch({ type: PLAYER_RENAME, id, name }),
+})
 class App extends Component {
   init() {
-    const {size} = this.state
-
-    const matrice = createBoard(size)
-    this.setState({
-      matrice,
-      appLoaded: true,
-      finish: false,
-      current: getRandomInt(2),
-      dialog: { open: false },
-    })
-  }
-
-  openDialog(type, value) {
-    const { title, message } = getMessageDialog(type, value)
-    this.setState({ dialog: { open: true, title, message }, finish: true })
-  }
-
-  switchPlayer() {
-    const { current } = this.state
-    this.setState({ current: current ? 0 : 1 })
-  }
-
-  updateCase(col) {
-    const { current: currentPlayer, matrice, finish, players } = this.state
-    if (!finish) {
-      const newMatrice = [...matrice]
-      const row = getLastPions(matrice, col)
-
-      if (row !== null) {
-        newMatrice[row][col] = currentPlayer ? 2 : 1
-        this.setState({ matrice: newMatrice })
-
-        if (checkWinner(matrice, row)) {
-          const newArrayPlayer = [...players]
-          newArrayPlayer[currentPlayer].win++
-
-          this.setState({players:newArrayPlayer})
-
-          this.openDialog('finish', players[currentPlayer].name)
-        } else if (checkDraw(matrice)) {
-          this.openDialog('draw')
-        } else {
-          this.switchPlayer()
-        }
-      } else {
-        alert('full !')
-      }
-    }
-  }
-
-  updateName(id) {
-    const { players } = this.state
-    const newArray = [...players]
-
-    const newName = prompt("player's name ?", players[id].name || null)
-
-    newArray[id].name = newName || players[id].name
-    this.setState({ players: newArray })
-  }
-
-  constructor() {
-    super()
-
-    this.state = {
-      appLoaded: false,
-      finish: false,
-      players: [{ name: 'Player1', win: 0 }, { name: 'Player2', win: 0 }],
-      current: 0,
-      matrice: [],
-      dialog: {
-        open: false,
-        title: '',
-        message: '',
-      },
-      size: {
-        row:5,
-        col:6,
-      }
-    }
+    this.props.onLoad(createBoard(DEFAULT_VALUE))
   }
   componentDidMount() {
     this.init()
   }
 
-  inputChange(value,  type) {
-    this.setState({size:{...this.state.size, [type]:value }}, this.init)
-  }
-
   render() {
-    const { appLoaded, matrice, players, current, dialog, size } = this.state
-
+    const { appLoaded, dialog } = this.props
     return (
       <div className="connect4">
         {appLoaded && (
           <div>
-            <h1>Connect 4 / GoJob</h1>
-            <h3>{`waiting ${players[current].name}...`}</h3>
-            <Board
-              matrice={matrice}
-              handleClick={col => this.updateCase(col)}
-              size={size}
-              handleInputChange={(type) => (e, value) => this.inputChange(value, type)}
-            />
-
-            <Players
-              contents={players}
-              handleClick={id => this.updateName(id)}
-            />
-            <div className="restart"><RaisedButton label="Restart" onClick={() => this.init()} /></div>
+            <Board />
+            <Players />
+            <div className="restart">
+              <RaisedButton label="Restart" onClick={() => this.init()} />
+            </div>
           </div>
         )}
         <DialogInfo
           values={dialog}
           restart={() => this.init()}
-          handleClose={() => this.setState({ dialog: { open: false } })}
+          handleClose={() => store.dispatch({ type: DIALOG_CLOSE })}
         />
       </div>
     )
   }
 }
 
-export default App
+export default connect(mapStateToProps, mapDispatchToProps)(App)

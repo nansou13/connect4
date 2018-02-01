@@ -39,7 +39,7 @@ background-color: yellow;
 }
 .players {
   text-align: center;
-  margin: -30px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
 .player span, .player{
   display: inline-block;

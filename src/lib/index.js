@@ -1,4 +1,4 @@
-export function createBoard({row, col}) {
+export function createBoard({ row, col }) {
   const matrice = []
   for (let x = 0; x < row; x++) {
     matrice[x] = []
@@ -40,51 +40,51 @@ export function checkWinner(matrice, rSelected) {
   }
 
   // Check Down only if 4 from bottom
-  //if (rSelected <= matrice.length - 4) {
-    for (row = 0; row <= rowMax; row++) {
-      for (col = 0; col < matrice[0].length; col++) {
-        if (
-          checkLine([
-            matrice[row][col],
-            matrice[row + 1][col],
-            matrice[row + 2][col],
-            matrice[row + 3][col],
-          ])
-        )
-          return matrice[row][col]
-      }
+  // if (rSelected <= matrice.length - 4) {
+  for (row = 0; row <= rowMax; row++) {
+    for (col = 0; col < matrice[0].length; col++) {
+      if (
+        checkLine([
+          matrice[row][col],
+          matrice[row + 1][col],
+          matrice[row + 2][col],
+          matrice[row + 3][col],
+        ])
+      )
+        return matrice[row][col]
     }
+  }
 
-    // down-right
-    for (row = 0; row <= rowMax; row++) {
-      for (col = 0; col <= colMax; col++) {
-        if (
-          checkLine([
-            matrice[row][col],
-            matrice[row + 1][col + 1],
-            matrice[row + 2][col + 2],
-            matrice[row + 3][col + 3],
-          ])
-        )
-          return matrice[row][col]
-      }
+  // down-right
+  for (row = 0; row <= rowMax; row++) {
+    for (col = 0; col <= colMax; col++) {
+      if (
+        checkLine([
+          matrice[row][col],
+          matrice[row + 1][col + 1],
+          matrice[row + 2][col + 2],
+          matrice[row + 3][col + 3],
+        ])
+      )
+        return matrice[row][col]
     }
+  }
 
-    // down-left
-    for (row = 0; row <= rowMax; row++) {
-      for (col = nbPerLine - 1; col < matrice[0].length; col++) {
-        if (
-          checkLine([
-            matrice[row][col],
-            matrice[row + 1][col - 1],
-            matrice[row + 2][col - 2],
-            matrice[row + 3][col - 3],
-          ])
-        )
-          return matrice[row][col]
-      }
+  // down-left
+  for (row = 0; row <= rowMax; row++) {
+    for (col = nbPerLine - 1; col < matrice[0].length; col++) {
+      if (
+        checkLine([
+          matrice[row][col],
+          matrice[row + 1][col - 1],
+          matrice[row + 2][col - 2],
+          matrice[row + 3][col - 3],
+        ])
+      )
+        return matrice[row][col]
     }
-//  }
+  }
+  //  }
 
   return false
 }
