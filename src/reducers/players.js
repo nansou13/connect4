@@ -5,6 +5,8 @@ import {
   FINISH,
 } from '../action-creator'
 
+import { getRandomInt } from '../lib'
+
 const defaultState = {
   list: [
     { id: 0, name: 'Player1', win: 0 },
@@ -18,7 +20,7 @@ export default (state = defaultState, action) => {
     case APP_LOAD:
       return {
         ...state,
-        current: 0,
+        current: getRandomInt(2),
       }
     case SWITCH_PLAYER:
       return {
