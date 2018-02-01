@@ -100,16 +100,20 @@ export function checkDraw(matrice) {
 
 export function getMessageDialog(type, value) {
   let message = ''
+  let title = ''
+
   switch (type) {
     case 'finish':
+      title = 'Congratulation'
       message = `${value} is the winner`
       break
     case 'draw':
+      title = 'Oh no...'
       message = 'draw ! nobody wins...'
       break
     default:
   }
-  return message
+  return { title, message }
 }
 
 export function updateName(name) {

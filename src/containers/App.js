@@ -33,8 +33,8 @@ class App extends Component {
   }
 
   openDialog(type, value) {
-    const message = getMessageDialog(type, value)
-    this.setState({ dialog: { open: true, message }, finish: true })
+    const { title, message } = getMessageDialog(type, value)
+    this.setState({ dialog: { open: true, title, message }, finish: true })
   }
 
   switchPlayer() {
@@ -91,6 +91,7 @@ class App extends Component {
       matrice: [],
       dialog: {
         open: false,
+        title: '',
         message: '',
       },
       size: {
