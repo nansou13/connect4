@@ -4,6 +4,8 @@ import Board from '../components/Board'
 import Players from '../components/Players'
 import DialogInfo from '../components/DialogInfo'
 
+import { getRandomInt } from '../lib'
+
 import RaisedButton from 'material-ui/RaisedButton';
 
 import {
@@ -25,7 +27,7 @@ class App extends Component {
       matrice,
       appLoaded: true,
       finish: false,
-      current: 0,
+      current: getRandomInt(2),
       dialog: { open: false },
     })
   }
