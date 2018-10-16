@@ -2,7 +2,17 @@
   "name": "connect4",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://gigan.fr/connect4",
+  "description": "Mini puissance 4 pour jouer avec Redux et sockerIO",
+  "homepage": "https://nansou13.github.io/connect4",
+  "author": "Nans <nans@gigan.fr>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nansou13/connect4.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nansou13/connect4/issues"
+  },
   "dependencies": {
     "classnames": "^2.2.5",
     "material-ui": "^0.20.0",
